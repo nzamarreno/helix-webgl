@@ -1,7 +1,13 @@
-import { RGBA } from "./NZXT";
+import { RGBA } from "./Helix";
 import { Scene } from "./scene";
 import { Camera } from "./camera";
 import { Mesh } from "./mesh";
+
+export interface RenderInitialization {
+    width?: number;
+    height?: number; 
+    color?: RGBA;
+}
 
 export class Render {
     canvas!: HTMLCanvasElement;
@@ -13,10 +19,10 @@ export class Render {
     height: number;
     color: RGBA;
 
-    constructor(width: number, height: number, color?: RGBA) {
-        this.width = width || window.innerWidth;
-        this.height = height || window.innerHeight;
-        this.color = color || {
+    constructor(options?: RenderInitialization) {
+        this.width = options && options.width ? options.width : window.innerWidth;
+        this.height = options && options.height || window.innerHeight;
+        this.color = options && options.color ? options.color : {
             r: 0.5,
             g: 0.6,
             b: 0.4,
@@ -67,8 +73,8 @@ export class Render {
                 shaderCreated = this.gl.createShader(this.gl.FRAGMENT_SHADER);
             }
 
-            if (shaderCreated) {
-                this.gl.shaderSource(shaderCreated, shaderScript.text);
+            if (shaderCreated && shaderScript.textContent) {
+                this.gl.shaderSource(shaderCreated, shaderScript.textContent);
                 this.gl.compileShader(shaderCreated);
                 const shaderVextexStatus = this.gl.getShaderParameter(
                     shaderCreated,

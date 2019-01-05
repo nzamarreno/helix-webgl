@@ -60,7 +60,6 @@ export class Camera {
 
     init() {
         this.position = { x: 0, y: 0, z: 0 };
-        // this.setPosition(this.position);
 
         let aspect = this.width / this.height;
         this.cMatrix = mat4.perspective(45, aspect, this.zNear, this.zFar);

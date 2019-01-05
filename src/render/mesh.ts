@@ -1,4 +1,4 @@
-import { RGBA } from './NZXT';
+import { RGBA } from './Helix';
 import { mat4 } from './../utils/mat4';
 
 export interface MeshOptions {
@@ -10,10 +10,11 @@ export class Mesh {
     geometry: number[];
     matrix: number[];
     indices: number[] | undefined;
-    color: RGBA;
-    wireframe: boolean;
+    color: RGBA | undefined;
+    wireframe: boolean | undefined;
     gl: WebGLRenderingContext;
     program: WebGLProgram;
+    aPosition: number | undefined;
 
     constructor(
         program: WebGLProgram,
@@ -42,7 +43,7 @@ export class Mesh {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(geometry), this.gl.STATIC_DRAW);
 
-        this.program.aPosition = this.gl.getAttribLocation(this.program, 'aPosition');
+        this.aPosition = this.gl.getAttribLocation(this.program, 'aPosition');
     }
 
     loadIndices(indices: number[] | undefined) {
@@ -54,11 +55,12 @@ export class Mesh {
     }
 
     renderObject() {
-        const type = this.wireframe ? this.gl.TRIANGLES : this.gl.LINES;
-
-        this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
-        this.gl.enableVertexAttribArray(this.program.aPosition);
-
+        const type = this.wireframe ? this.gl.LINES : this.gl.TRIANGLES;
+        if (this.aPosition) {
+            this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
+            this.gl.enableVertexAttribArray(this.aPosition);
+        }
+        
         if (this.indices && this.indices.length > 0) {
             this.gl.drawElements(type, this.indices.length, this.gl.UNSIGNED_SHORT, 0);
         } else {
