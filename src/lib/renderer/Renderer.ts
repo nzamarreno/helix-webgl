@@ -1,35 +1,39 @@
-import { RGBA } from "./Helix";
-import { Scene } from "./scene";
-import { Camera } from "./camera";
-import { Mesh } from "./mesh";
+import { IColorRGBA } from "../Helix";
+import { Camera } from "../camera/Camera";
+import { Scene } from "../scene/Scene";
+import { Mesh } from "../geometry/Mesh";
 
-export interface RenderInitialization {
+export interface IRenderInitialization {
     width?: number;
-    height?: number; 
-    color?: RGBA;
+    height?: number;
+    background?: IColorRGBA;
 }
 
 export class Render {
     canvas!: HTMLCanvasElement;
     program!: WebGLProgram;
+    gl!: WebGLRenderingContext;
     vertexShader: any;
     fragmentShader: any;
-    gl!: WebGLRenderingContext;
     width: number;
     height: number;
-    color: RGBA;
+    background: IColorRGBA;
 
-    constructor(options?: RenderInitialization) {
-        this.width = options && options.width ? options.width : window.innerWidth;
-        this.height = options && options.height || window.innerHeight;
-        this.color = options && options.color ? options.color : {
-            r: 0.5,
-            g: 0.6,
-            b: 0.4,
-            a: 1.0
-        };
+    constructor(options?: IRenderInitialization) {
+        this.width =
+            options && options.width ? options.width : window.innerWidth;
+        this.height = (options && options.height) || window.innerHeight;
+        this.background =
+            options && options.background
+                ? options.background
+                : {
+                      r: 0.5,
+                      g: 0.6,
+                      b: 0.4,
+                      a: 1.0
+                  };
+
         this.init();
-
         this.initShader();
         this.initProgram();
     }
@@ -102,22 +106,24 @@ export class Render {
         }
     }
 
-    setBackground(color: RGBA) {
-        this.color = color;
+    setBackground(color: IColorRGBA) {
+        this.background = color;
     }
 
     render(camera: Camera, scene: Scene) {
         this.gl.clearColor(
-            this.color.r,
-            this.color.g,
-            this.color.b,
-            this.color.a
+            this.background.r,
+            this.background.g,
+            this.background.b,
+            this.background.a
         );
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
         this.gl.viewport(0, 0, this.width, this.height);
 
         camera.renderCamera();
 
+        // Render Scene
+        scene.render();
         const objects: Mesh[] = scene.getObjectsOfScene();
 
         for (let i = 0; i < objects.length; i++) {

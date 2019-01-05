@@ -9,13 +9,14 @@
     ],
     "main": "src/index.tsx",
     "dependencies": {
+        "gl-matrix": "^3.0.0"
     },
     "devDependencies": {
         "ts-loader": "^5.3.2",
-        "webpack-dev-server": "^3.1.14",
         "typescript": "^3.2.2",
         "webpack": "^4.28.3",
-        "webpack-cli": "^3.2.0"
+        "webpack-cli": "^3.2.0",
+        "webpack-dev-server": "^3.1.14"
     },
     "scripts": {
         "initTS": "tsc --init",
