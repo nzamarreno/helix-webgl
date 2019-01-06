@@ -33,14 +33,12 @@ function renderSphere(numberOfSphere: number): Mesh[] {
     return geometryScene;
 }
 
+const floor = Helix.FloorGeometryHelper();
 camera.position.z = 10;
-const myScene = renderSphere(3);
+camera.rotate.x = -0.1;
 
+scene.add(floor);
 function draw() {
-    myScene[0].rotate.x += 0.01;
-    myScene[1].rotate.y += 0.01;
-    myScene[2].rotate.x += 0.01;
-
     render.render(camera, scene);
     requestAnimationFrame(draw);
 }

@@ -1,26 +1,23 @@
+export interface IFloor {
+    dimensions?: number;
+    lines?: number;
+}
+
 export class Floor {
-    alias: string;
-    wireframe: boolean;
     dimension: number;
     lines: number;
-    vertices: number[];
+    geometry: number[];
     indices: number[];
-    diffuse: number[];
 
-    constructor() {
-        this.alias = "floor";
-        this.wireframe = true;
-        this.dimension = 50;
-        this.lines = 50;
-        this.vertices = [];
+    constructor(options?: IFloor) {
+        this.dimension =
+            options && options.dimensions ? options.dimensions : 50;
+        this.lines = options && options.lines ? options.lines : 50;
+        this.geometry = [];
         this.indices = [];
-        this.diffuse = [0.7, 0.7, 0.7, 1.0];
     }
 
-    private build(dimension: number, lines: number) {
-        if (dimension) this.dimension = dimension;
-        if (lines) this.lines = (2 * this.dimension) / lines;
-
+    public build() {
         var inc = (2 * this.dimension) / this.lines;
         var v = [];
         var i = [];
@@ -48,7 +45,7 @@ export class Floor {
             i[2 * (this.lines + 1) + 2 * l + 1] =
                 2 * (this.lines + 1) + 2 * l + 1;
         }
-        this.vertices = v;
+        this.geometry = v;
         this.indices = i;
     }
 }

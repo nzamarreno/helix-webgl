@@ -1,3 +1,5 @@
+import { Axis } from "./helpers/axis";
+import { Floor, IFloor } from "./helpers/floor";
 import { Audio, IAudio } from "./audio/Audio";
 import { Render, IRenderInitialization } from "./renderer/Renderer";
 import { Camera } from "./camera/Camera";
@@ -65,6 +67,26 @@ class Helix {
         this.AudioInstance = new Audio(filename, options);
 
         return this.AudioInstance;
+    }
+
+    public FloorGeometryHelper(options?: IFloor) {
+        const floor = new Floor(options);
+        floor.build();
+
+        return new Mesh(this.program, this.gl, floor.geometry, floor.indices, {
+            color: Color.convertHexToRGB("FFFFFF"),
+            wireframe: true
+        });
+    }
+
+    public AxisGeometryHelper(dimensions?: number) {
+        const axis = new Axis(dimensions);
+        axis.build();
+
+        return new Mesh(this.program, this.gl, axis.geometry, axis.indices, {
+            color: Color.convertHexToRGB("FFFFFF"),
+            wireframe: true
+        });
     }
 }
 

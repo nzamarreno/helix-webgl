@@ -81,15 +81,15 @@ _Below, the fundamentales parameters for the elements of the scene_
 ### Render Constructor
 
 ```typescript
-const optionsRender = {
+const options = {
     backgrond: Helix.Color("FFFFFF"),
     height: 400,
     width: 400
 };
-const render = new Render(optionsRender);
+const render = new Render(options);
 ```
 
-#### `Options` - _Object_
+#### `options` - _Object_
 
 | Parameter  | Type   | Mandatory |        default value |
 | ---------- | ------ | --------- | -------------------: |
@@ -100,17 +100,17 @@ const render = new Render(optionsRender);
 ### Scene Constructor
 
 ```typescript
-const optionsScene = {
+const options = {
     height: 400,
     width: 400,
     angle: 90,
     zNear: 10,
     zFear: 100
 };
-const scene = new Scene(optionsScene);
+const scene = new Scene(options);
 ```
 
-#### `Options` - _Object_
+#### `options` - _Object_
 
 | Parameter | Type   | Mandatory |        default value |
 | --------- | ------ | --------- | -------------------: |
@@ -123,17 +123,17 @@ const scene = new Scene(optionsScene);
 ### Audio Constructor
 
 ```typescript
-const optionsAudio = {
+const options = {
     filename: "./assets/music.mp3",
     options: {
         sizeFFT: 64,
         helper: true
     }
 };
-const audio = new Audio(optionsScene);
+const audio = new Audio(options);
 ```
 
-#### `Options` - _Object_
+#### `options` - _Object_
 
 | Parameter | Type    | Mandatory | default value |
 | --------- | ------- | --------- | ------------: |
@@ -141,3 +141,38 @@ const audio = new Audio(optionsScene);
 | helper    | boolean | false     |         false |
 
 ## Helpers
+
+### FloorGeometryHelper Constructor
+
+```typescript
+const options = {
+    dimensions: 50,
+    lines: 10
+};
+
+const scene = Helix.Scene();
+const FloorGeometry = new FloorGeometryHelper(options);
+scene.add(FloorGeometry);
+```
+
+#### `options` - _Object_
+
+| Parameter  | Type   | Mandatory | default value |
+| ---------- | ------ | --------- | ------------: |
+| dimensions | number | false     |            50 |
+| lines      | number | false     |            50 |
+
+### AxisGeometryHelper Constructor
+
+```typescript
+const option = 50;
+const scene = Helix.Scene();
+const AxisGeometry = new AxisGeometryHelper(option);
+scene.add(AxisGeometry);
+```
+
+#### `option` - _Parameter_
+
+| Parameter  | Type   | Mandatory | default value |
+| ---------- | ------ | --------- | ------------: |
+| dimensions | number | false     |            50 |

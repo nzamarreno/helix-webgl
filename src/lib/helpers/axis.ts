@@ -1,16 +1,11 @@
 export class Axis {
-    alias: string;
     dimension: number;
-    vertices: number[];
+    geometry: number[];
     indices: number[];
-    colors: number[];
-    wireframe: boolean;
-    perVertexColor: boolean;
 
-    constructor() {
-        this.alias = "axis";
-        this.dimension = 10;
-        this.vertices = [
+    constructor(dimensions?: number) {
+        this.dimension = dimensions || 50;
+        this.geometry = [
             -10,
             0.0,
             0.0,
@@ -31,57 +26,28 @@ export class Axis {
             10
         ];
         this.indices = [0, 1, 2, 3, 4, 5];
-        this.colors = [
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1
-        ];
-        this.wireframe = true;
-        this.perVertexColor = true;
     }
 
-    private build(dimension: number) {
-        if (dimension) this.dimension = dimension;
-        this.vertices = [
-            -dimension,
+    public build() {
+        this.geometry = [
+            -this.dimension,
             0.0,
             0.0,
-            dimension,
-            0.0,
-            0.0,
-            0.0,
-            -dimension / 2,
-            0.0,
-            0.0,
-            dimension / 2,
+            this.dimension,
             0.0,
             0.0,
             0.0,
-            -dimension,
+            -this.dimension / 2,
             0.0,
             0.0,
-            dimension
+            this.dimension / 2,
+            0.0,
+            0.0,
+            0.0,
+            -this.dimension,
+            0.0,
+            0.0,
+            this.dimension
         ];
     }
 }
