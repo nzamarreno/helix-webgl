@@ -42,31 +42,30 @@ export class Scene {
             this.program,
             "uPMatrix"
         );
-
-        this.init();
-    }
-
-    public init() {
-        let aspect = this.width / this.height;
-
-        this.uPMatrix = mat4.perspective(
-            mat4.create(),
-            45,
-            aspect,
-            this.zNear,
-            this.zFar
-        );
     }
 
     public add(obj: Mesh): void {
         this.objects.push(obj);
     }
 
-    public render() {
+    public render(width: number, height: number) {
+        this.createMatrix(width, height);
         this.gl.uniformMatrix4fv(this.uPMatrixLocation, false, this.uPMatrix);
     }
 
     public getObjectsOfScene(): Mesh[] {
         return this.objects;
+    }
+
+    private createMatrix(width: number, height: number) {
+        let aspect = width / height;
+
+        this.uPMatrix = mat4.perspective(
+            mat4.create(),
+            this.angle,
+            aspect,
+            this.zNear,
+            this.zFar
+        );
     }
 }
