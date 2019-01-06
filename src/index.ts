@@ -11,6 +11,7 @@ const render = Helix.Render(renderOptions);
 const scene = Helix.Scene();
 const camera = Helix.Camera();
 const music = Helix.Audio("./assets/music.mp3");
+music.helper = true;
 
 function renderSphere(numberOfSphere: number): Mesh[] {
     const position = [-5, 0, 5];

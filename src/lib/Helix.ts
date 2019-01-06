@@ -1,4 +1,4 @@
-import { Audio } from "./audio/Audio";
+import { Audio, IAudio } from "./audio/Audio";
 import { Render, IRenderInitialization } from "./renderer/Renderer";
 import { Camera } from "./camera/Camera";
 import { Mesh, IMeshOptions } from "./geometry/Mesh";
@@ -61,8 +61,10 @@ class Helix {
         return Color.convertHexToRGB(HexColor);
     }
 
-    public Audio(filename: string) {
-        this.AudioInstance = new Audio(filename);
+    public Audio(filename: string, options?: IAudio) {
+        this.AudioInstance = new Audio(filename, options);
+
+        return this.AudioInstance;
     }
 }
 

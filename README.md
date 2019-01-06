@@ -7,6 +7,7 @@ _Little Library for help you to create WebGL WebSite_
 -   [Webpack CLI](#webpack-cli)
 -   [Getting Start](#getting-start)
 -   [Parameters](#parameters)
+-   [Helpers](#helpers)
 
 ## Webpack CLI
 
@@ -23,6 +24,7 @@ $ yarn install && yarn run server
 #### Render with basics parameters
 
 ```typescript
+import { Audio } from "./lib/audio/Audio";
 import { Mesh } from "./lib/geometry/Mesh";
 import { Sphere, Sphere_indices } from "./geometry/sphere";
 import Helix from "./lib/Helix";
@@ -34,6 +36,8 @@ const renderOptions = {
 const render = Helix.Render(renderOptions);
 const scene = Helix.Scene();
 const camera = Helix.Camera();
+const music = Helix.Audio("./assets/music.mp3");
+music.helper = true;
 
 function renderSphere(numberOfSphere: number): Mesh[] {
     const position = [-5, 0, 5];
@@ -42,7 +46,7 @@ function renderSphere(numberOfSphere: number): Mesh[] {
     for (let i = 0; i < numberOfSphere; i++) {
         const sphere = Helix.Mesh(Sphere, Sphere_indices, {
             color: Helix.Color("FFFFFF"),
-            wireframe: false
+            wireframe: true
         });
 
         sphere.position.x = position[i];
@@ -70,7 +74,7 @@ function draw() {
 draw();
 ```
 
-## Parameters:
+## Parameters
 
 _Below, the fundamentales parameters for the elements of the scene_
 
@@ -85,7 +89,7 @@ const optionsRender = {
 const render = new Render(optionsRender);
 ```
 
-### `Options` - _Object_
+#### `Options` - _Object_
 
 | Parameter  | Type   | Mandatory |        default value |
 | ---------- | ------ | --------- | -------------------: |
@@ -106,7 +110,7 @@ const optionsScene = {
 const scene = new Scene(optionsScene);
 ```
 
-### `Options` - _Object_
+#### `Options` - _Object_
 
 | Parameter | Type   | Mandatory |        default value |
 | --------- | ------ | --------- | -------------------: |
@@ -115,3 +119,25 @@ const scene = new Scene(optionsScene);
 | angle     | number | false     |                   45 |
 | zNear     | number | false     |                    1 |
 | zFar      | number | false     |                 1000 |
+
+### Audio Constructor
+
+```typescript
+const optionsAudio = {
+    filename: "./assets/music.mp3",
+    options: {
+        sizeFFT: 64,
+        helper: true
+    }
+};
+const audio = new Audio(optionsScene);
+```
+
+#### `Options` - _Object_
+
+| Parameter | Type    | Mandatory | default value |
+| --------- | ------- | --------- | ------------: |
+| sizeFFT   | number  | false     |            64 |
+| helper    | boolean | false     |         false |
+
+## Helpers

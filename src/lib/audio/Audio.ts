@@ -1,11 +1,24 @@
+import { AudioHelper } from "./AudioHelper";
+
+export interface IAudio {
+    sizeFFT: 32 | 64 | 128 | 256 | 512 | 1024;
+    helper: boolean;
+}
+
 export class Audio {
     audioContext!: AudioContext;
-    helper!: boolean;
+    helper: boolean;
     filename: string;
+    audioHelper!: AudioHelper;
+    sizeFFT: 32 | 64 | 128 | 256 | 512 | 1024;
 
-    constructor(filename: string) {
+    constructor(filename: string, options?: IAudio) {
         (window as any).AudioContext =
             (window as any).AudioContext || (window as any).webkitAudioContext;
+
+        this.filename = filename;
+        this.helper = options && options.helper ? options.helper : false;
+        this.sizeFFT = options && options.sizeFFT ? options.sizeFFT : 64;
 
         try {
             this.audioContext = new AudioContext();
@@ -13,14 +26,9 @@ export class Audio {
             alert("Web Audio API is not supported in this browser");
         }
 
-        this.filename = filename;
-        this.helper = false;
+        this.audioHelper = new AudioHelper();
 
         window.addEventListener("load", this.loadAudio.bind(this), false);
-    }
-
-    private createHelper() {
-        const helperDOM = document.createElement("canvas");
     }
 
     private loadAudio() {
@@ -41,24 +49,30 @@ export class Audio {
                         analyser.frequencyBinCount
                     );
 
-                    analyser.fftSize = 1024;
+                    analyser.fftSize = this.sizeFFT;
 
                     const source = audio.createBufferSource();
                     source.buffer = buffer;
                     source.connect(analyser);
 
-                    // Music => speaker
                     source.connect(audio.destination);
 
-                    // Start source (play the music)
                     source.start(0);
 
                     // Animation element with frequency
                     const renderFrame = () => {
                         analyser.getByteFrequencyData(frequencyData);
-                        console.log(
-                            `scale(${1 + (frequencyData[5] * 100) / 256 / 200})`
-                        );
+                        // console.log(
+                        //     `scale(${1 + (frequencyData[5] * 100) / 256 / 200})`
+                        // );
+
+                        // Create Helper
+                        if (this.helper) {
+                            this.audioHelper.renderHelper(
+                                frequencyData,
+                                analyser.frequencyBinCount
+                            );
+                        }
                         requestAnimationFrame(renderFrame);
                     };
 
