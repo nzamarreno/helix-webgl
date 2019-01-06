@@ -1,4 +1,3 @@
-import * as glMatrix from "gl-matrix";
 import { Sphere, Sphere_indices } from "./geometry/sphere";
 import Helix from "./lib/Helix";
 

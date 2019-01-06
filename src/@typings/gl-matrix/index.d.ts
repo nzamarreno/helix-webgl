@@ -13,6 +13,23 @@ declare module "gl-matrix" {
             vec3: number[]
         ) => number[];
         create: () => number[];
+        rotateX: (
+            out: number[],
+            mat4ToRotate: number[],
+            rad: number
+        ) => number[];
+        rotateY: (
+            out: number[],
+            mat4ToRotate: number[],
+            rad: number
+        ) => number[];
+        identity: (out: number[]) => number[];
+        multiply: (
+            out: number[],
+            firstOperand: number[],
+            secondOperand: number[]
+        ) => number[];
+        invert: (out: number[], sourceMatrix: number[]) => number[];
     }
 
     const mat4: mat4;

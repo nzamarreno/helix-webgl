@@ -1,3 +1,4 @@
+import { position3D } from "./../camera/Camera";
 import { mat4 } from "gl-matrix";
 import { IColorRGBA } from "../Helix";
 
@@ -14,6 +15,8 @@ export class Mesh {
     wireframe: boolean | undefined;
     gl: WebGLRenderingContext;
     program: WebGLProgram;
+    position: position3D;
+    rotate: position3D;
 
     // Shader
     aPosition: number | undefined;
@@ -31,6 +34,8 @@ export class Mesh {
         this.program = program;
         this.matrix = mat4.create();
         this.indices = indices;
+        this.position = { x: 0, y: 0, z: 0 };
+        this.rotate = { x: 0, y: 0, z: 0 };
 
         this.color =
             options && options.color
@@ -98,5 +103,27 @@ export class Mesh {
                 this.gl.STATIC_DRAW
             );
         }
+    }
+
+    public getPosition() {
+        mat4.identity(this.matrix);
+
+        this.calculatePosition();
+        this.calculateRotation();
+
+        return this.matrix;
+    }
+
+    private calculatePosition() {
+        this.matrix = mat4.translate(this.matrix, mat4.create(), [
+            this.position.x,
+            this.position.y,
+            this.position.z
+        ]);
+    }
+
+    private calculateRotation() {
+        this.matrix = mat4.rotateX(this.matrix, mat4.create(), this.rotate.x);
+        this.matrix = mat4.rotateY(this.matrix, mat4.create(), this.rotate.y);
     }
 }

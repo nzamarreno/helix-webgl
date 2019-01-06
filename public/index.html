@@ -14,12 +14,12 @@
 
     <body>
         <script id="vertex" type="x-shader/x-vertex">
-            attribute vec4 aPosition;
+            attribute vec3 aPosition;
             uniform mat4 uPMatrix;
             uniform mat4 uWMatrix;
 
             void main() {
-              gl_Position = uPMatrix * uWMatrix * aPosition;
+              gl_Position = uPMatrix * uWMatrix * vec4(aPosition, 1.0);
             }
         </script>
 

@@ -48,6 +48,7 @@ export class Scene {
 
     public init() {
         let aspect = this.width / this.height;
+
         this.uPMatrix = mat4.perspective(
             mat4.create(),
             45,
