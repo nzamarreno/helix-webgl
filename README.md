@@ -8,6 +8,7 @@ _Little Library for help you to create WebGL WebSite_
 -   [Getting Start](#getting-start)
 -   [Parameters](#parameters)
 -   [Helpers](#helpers)
+-   [Todo](#to-do)
 
 ## Webpack CLI
 
@@ -176,3 +177,11 @@ scene.add(AxisGeometry);
 | Parameter  | Type   | Mandatory | default value |
 | ---------- | ------ | --------- | ------------: |
 | dimensions | number | false     |            50 |
+
+## To do
+
+-   Retrieve waves of song with the `Audio` class
+
+---
+
+**Made with feeling & <3**

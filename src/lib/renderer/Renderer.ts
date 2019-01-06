@@ -1,8 +1,8 @@
 import { IColorRGBA } from "../Helix";
 import { Camera } from "../camera/Camera";
-import { Scene } from "../scene/Scene";
 import { Mesh } from "../geometry/Mesh";
 import { RendererDOM } from "./RendererDOM";
+import { Scene } from "../scene/Scene";
 
 export interface IRenderInitialization {
     width?: number;
