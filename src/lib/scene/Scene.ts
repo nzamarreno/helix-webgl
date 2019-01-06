@@ -10,8 +10,6 @@ export interface IScene {
 }
 
 export class Scene {
-    private height: number;
-    private width: number;
     private angle: number;
     private zNear: number;
     private zFar: number;
@@ -30,9 +28,9 @@ export class Scene {
         this.program = program;
         this.gl = gl;
 
-        this.height =
+        const height =
             options && options.height ? options.height : window.innerHeight;
-        this.width =
+        const width =
             options && options.width ? options.width : window.innerWidth;
         this.angle = options && options.angle ? options.angle : 45;
         this.zNear = options && options.zNear ? options.zNear : 1;

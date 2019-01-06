@@ -105,25 +105,16 @@ export class Mesh {
         }
     }
 
-    public getPosition() {
-        mat4.identity(this.matrix);
-
-        this.calculatePosition();
-        this.calculateRotation();
-
-        return this.matrix;
-    }
-
-    private calculatePosition() {
-        this.matrix = mat4.translate(this.matrix, mat4.create(), [
+    public getPosition(matrixCamera: number[]) {
+        this.matrix = mat4.translate(matrixCamera, matrixCamera, [
             this.position.x,
             this.position.y,
             this.position.z
         ]);
-    }
 
-    private calculateRotation() {
-        this.matrix = mat4.rotateX(this.matrix, mat4.create(), this.rotate.x);
-        this.matrix = mat4.rotateY(this.matrix, mat4.create(), this.rotate.y);
+        this.matrix = mat4.rotateY(this.matrix, this.matrix, this.rotate.y);
+        this.matrix = mat4.rotateX(this.matrix, this.matrix, this.rotate.x);
+
+        return this.matrix;
     }
 }

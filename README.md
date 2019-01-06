@@ -22,27 +22,47 @@ $ yarn install && yarn run server
 
 #### Render with basics parameters
 
-```javascript
-import Helix from "./render/Helix";
+```typescript
+import { Mesh } from "./lib/geometry/Mesh";
 import { Sphere, Sphere_indices } from "./geometry/sphere";
+import Helix from "./lib/Helix";
 
-// Options for the render
-// Helix Color transform your hexadecimal color in color normalize
 const renderOptions = {
-    color: Helix.Color("#0747A6")
+    background: Helix.Color("#0747A6")
 };
 
 const render = Helix.Render(renderOptions);
 const scene = Helix.Scene();
 const camera = Helix.Camera();
-const mesh = Helix.Mesh(Sphere, Sphere_indices, {
-    color: Helix.Color("#FFFFFF"),
-    wireframe: false
-});
 
-scene.add(mesh);
+function renderSphere(numberOfSphere: number): Mesh[] {
+    const position = [-5, 0, 5];
+    const geometryScene = [];
+
+    for (let i = 0; i < numberOfSphere; i++) {
+        const sphere = Helix.Mesh(Sphere, Sphere_indices, {
+            color: Helix.Color("FFFFFF"),
+            wireframe: false
+        });
+
+        sphere.position.x = position[i];
+
+        scene.add(sphere);
+
+        geometryScene.push(sphere);
+    }
+
+    return geometryScene;
+}
+
+camera.position.z = 10;
+const myScene = renderSphere(3);
 
 function draw() {
+    myScene[0].rotate.x += 0.01;
+    myScene[1].rotate.y += 0.01;
+    myScene[2].rotate.x += 0.01;
+
     render.render(camera, scene);
     requestAnimationFrame(draw);
 }
@@ -50,4 +70,48 @@ function draw() {
 draw();
 ```
 
-### Parameters:
+## Parameters:
+
+_Below, the fundamentales parameters for the elements of the scene_
+
+### Render Constructor
+
+```typescript
+const optionsRender = {
+    backgrond: Helix.Color("FFFFFF"),
+    height: 400,
+    width: 400
+};
+const render = new Render(optionsRender);
+```
+
+### `Options` - _Object_
+
+| Parameter  | Type   | Mandatory |        default value |
+| ---------- | ------ | --------- | -------------------: |
+| background | string | false     |              #FFFFFF |
+| width      | number | false     |  `window.innerWidth` |
+| height     | number | false     | `window.innerHeight` |
+
+### Scene Constructor
+
+```typescript
+const optionsScene = {
+    height: 400,
+    width: 400,
+    angle: 90,
+    zNear: 10,
+    zFear: 100
+};
+const scene = new Scene(optionsScene);
+```
+
+### `Options` - _Object_
+
+| Parameter | Type   | Mandatory |        default value |
+| --------- | ------ | --------- | -------------------: |
+| width     | number | false     |  `window.innerWidth` |
+| height    | number | false     | `window.innerHeight` |
+| angle     | number | false     |                   45 |
+| zNear     | number | false     |                    1 |
+| zFar      | number | false     |                 1000 |

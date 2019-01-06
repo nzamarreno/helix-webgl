@@ -8,27 +8,16 @@ export interface position3D {
 
 export class Camera {
     public position: position3D;
-    program: WebGLProgram;
-    gl: WebGLRenderingContext;
-    uWMatrix: number[];
-    cMatrix: number[];
-    uPMatrixLocation!: WebGLUniformLocation | null;
-    rotate: position3D;
+    public rotate: position3D;
+    public uWMatrix: number[];
+    private cMatrix: number[];
 
     constructor(program: WebGLProgram, gl: WebGLRenderingContext) {
         this.position = { x: 0, y: 0, z: 5 };
         this.rotate = { x: 0, y: 0, z: 0 };
 
-        this.program = program;
-        this.gl = gl;
-
         this.uWMatrix = mat4.create();
         this.cMatrix = mat4.create();
-
-        this.uPMatrixLocation = this.gl.getUniformLocation(
-            this.program,
-            "uWMatrix"
-        );
     }
 
     public setPosition(position: position3D) {
@@ -40,10 +29,7 @@ export class Camera {
 
         this.calculateRotation();
         this.calculatePosition();
-
         mat4.invert(this.uWMatrix, this.cMatrix);
-
-        this.gl.uniformMatrix4fv(this.uPMatrixLocation, false, this.uWMatrix);
     }
 
     private calculatePosition() {
