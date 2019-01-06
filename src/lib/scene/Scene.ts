@@ -27,11 +27,6 @@ export class Scene {
     ) {
         this.program = program;
         this.gl = gl;
-
-        const height =
-            options && options.height ? options.height : window.innerHeight;
-        const width =
-            options && options.width ? options.width : window.innerWidth;
         this.angle = options && options.angle ? options.angle : 45;
         this.zNear = options && options.zNear ? options.zNear : 1;
         this.zFar = options && options.zFar ? options.zFar : 1000;

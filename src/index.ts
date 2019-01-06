@@ -1,3 +1,4 @@
+import { Audio } from "./lib/audio/Audio";
 import { Mesh } from "./lib/geometry/Mesh";
 import { Sphere, Sphere_indices } from "./geometry/sphere";
 import Helix from "./lib/Helix";
@@ -9,6 +10,7 @@ const renderOptions = {
 const render = Helix.Render(renderOptions);
 const scene = Helix.Scene();
 const camera = Helix.Camera();
+const music = Helix.Audio("./assets/music.mp3");
 
 function renderSphere(numberOfSphere: number): Mesh[] {
     const position = [-5, 0, 5];
@@ -17,7 +19,7 @@ function renderSphere(numberOfSphere: number): Mesh[] {
     for (let i = 0; i < numberOfSphere; i++) {
         const sphere = Helix.Mesh(Sphere, Sphere_indices, {
             color: Helix.Color("FFFFFF"),
-            wireframe: false
+            wireframe: true
         });
 
         sphere.position.x = position[i];

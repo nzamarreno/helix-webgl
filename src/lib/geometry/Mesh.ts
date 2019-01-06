@@ -47,7 +47,9 @@ export class Mesh {
                   ]
                 : [0.4, 0.4, 0.5, 1.0];
         this.wireframe =
-            options && options.wireframe ? options.wireframe : true;
+            options && options.wireframe !== undefined
+                ? options.wireframe
+                : true;
 
         // Inialization Shader
         this.uColor = this.gl.getUniformLocation(this.program, "uColor");

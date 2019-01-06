@@ -1,8 +1,9 @@
-import { Scene } from "./scene/Scene";
+import { Audio } from "./audio/Audio";
 import { Render, IRenderInitialization } from "./renderer/Renderer";
 import { Camera } from "./camera/Camera";
 import { Mesh, IMeshOptions } from "./geometry/Mesh";
 import { Color } from "./utils/color";
+import { Scene } from "./scene/Scene";
 
 export interface IColorRGBA {
     r: number;
@@ -16,6 +17,7 @@ class Helix {
     RenderInstance!: Render;
     CameraInstance!: Camera;
     MeshInstance!: Mesh;
+    AudioInstance!: Audio;
     program!: WebGLProgram;
     gl!: WebGLRenderingContext;
 
@@ -57,6 +59,10 @@ class Helix {
 
     public Color(HexColor: string) {
         return Color.convertHexToRGB(HexColor);
+    }
+
+    public Audio(filename: string) {
+        this.AudioInstance = new Audio(filename);
     }
 }
 
