@@ -1,7 +1,7 @@
-import { Audio } from "./lib/audio/Audio";
-import { Mesh } from "./lib/geometry/Mesh";
 import { Sphere, Sphere_indices } from "./geometry/sphere";
 import Helix from "./lib/Helix";
+import { Noise } from "./lib/helpers/perlin";
+import { Mesh } from "./lib/geometry/Mesh";
 
 const renderOptions = {
     background: Helix.Color("#0747A6")
@@ -13,32 +13,38 @@ const camera = Helix.Camera();
 const music = Helix.Audio("./assets/music.mp3");
 music.helper = true;
 
-function renderSphere(numberOfSphere: number): Mesh[] {
-    const position = [-5, 0, 5];
-    const geometryScene = [];
+let sphere = Helix.Mesh(Sphere, Sphere_indices, {
+    color: Helix.Color("FFFFFF"),
+    wireframe: true
+});
 
-    for (let i = 0; i < numberOfSphere; i++) {
-        const sphere = Helix.Mesh(Sphere, Sphere_indices, {
-            color: Helix.Color("FFFFFF"),
-            wireframe: true
-        });
 
-        sphere.position.x = position[i];
+function modifyGeometry(geometry: Mesh, average: number | undefined) {
+    const newGeometry = [];
+    const decomposedGeometry = geometry.getGeometryPoints();
 
-        scene.add(sphere);
-
-        geometryScene.push(sphere);
+    if (average) {
+        for (var i = 0; i < decomposedGeometry.length; i++) {
+            let p = decomposedGeometry[i];
+            const geometryTransform = geometry.multiplyScalar(decomposedGeometry[i], 1 + (average / 100) * Noise.perlin3(p.x, p.y, p.z));
+            newGeometry.push(geometryTransform.x, geometryTransform.y, geometryTransform.z);
+        }
+        geometry.geometry = newGeometry;
     }
 
-    return geometryScene;
 }
 
-const floor = Helix.FloorGeometryHelper();
-camera.position.z = 10;
+camera.position.z = 5;
 camera.rotate.x = -0.1;
+scene.add(sphere);
 
-scene.add(floor);
+
 function draw() {
+    const musicAverage = music.getAverageFrequency();
+    const average = musicAverage ? Math.sin(musicAverage) : undefined
+    modifyGeometry(sphere, average);
+    sphere.rotate.y += .01;
+    sphere.rotate.x += .01;
     render.render(camera, scene);
     requestAnimationFrame(draw);
 }

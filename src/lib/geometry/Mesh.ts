@@ -40,11 +40,11 @@ export class Mesh {
         this.color =
             options && options.color
                 ? [
-                      options.color.r,
-                      options.color.g,
-                      options.color.g,
-                      options.color.a
-                  ]
+                    options.color.r,
+                    options.color.g,
+                    options.color.g,
+                    options.color.a
+                ]
                 : [0.4, 0.4, 0.5, 1.0];
         this.wireframe =
             options && options.wireframe !== undefined
@@ -60,10 +60,34 @@ export class Mesh {
         this.loadIndices(this.indices);
     }
 
+    public multiplyScalar(position: position3D, scalar: number) {
+        const coordinates = { x: 0, y: 0, z: 0 };
+        coordinates.x = position.x * scalar;
+        coordinates.y = position.y * scalar;
+        coordinates.z = position.z * scalar;
+
+        return coordinates;
+    }
+
+    public getGeometryPoints(): position3D[] {
+        const coords: position3D[] = [];
+
+        for (let i = 0; i < this.geometry.length / 3; i++) {
+            const start = i * 3;
+            let arrayPos = this.geometry.slice(start, start + 3);
+
+            coords.push({ x: arrayPos[0], y: arrayPos[1], z: arrayPos[2] });
+        }
+
+        return coords;
+    }
+
     public renderObject() {
         const type = this.wireframe ? this.gl.LINES : this.gl.TRIANGLES;
 
         // Vertices Geometry
+        this.loadBuffer(this.geometry);
+
         if (this.aPosition == 0 && this.aPosition !== undefined) {
             this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
             this.gl.enableVertexAttribArray(this.aPosition);
