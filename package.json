@@ -9,6 +9,7 @@
     ],
     "main": "src/index.tsx",
     "dependencies": {
+        "animejs": "^3.0.0",
         "gl-matrix": "^3.0.0"
     },
     "devDependencies": {
