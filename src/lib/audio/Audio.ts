@@ -12,6 +12,7 @@ export class Audio {
   audioHelper!: AudioHelper;
   sizeFFT: 32 | 64 | 128 | 256 | 512 | 1024;
   frequencyData!: Uint8Array;
+  isPlaying: boolean;
 
   constructor(filename: string, options?: IAudio) {
     (window as any).AudioContext =
@@ -20,6 +21,7 @@ export class Audio {
     this.filename = filename;
     this.helper = options && options.helper ? options.helper : false;
     this.sizeFFT = options && options.sizeFFT ? options.sizeFFT : 64;
+    this.isPlaying = false;
 
     try {
       this.audioContext = new AudioContext();
@@ -42,6 +44,12 @@ export class Audio {
       }
 
       return value / data.length;
+    }
+  }
+
+  public getTonality(tonality: number) {
+    if (this.frequencyData) {
+      return this.frequencyData[tonality];
     }
   }
 
@@ -70,6 +78,12 @@ export class Audio {
           source.connect(audio.destination);
 
           source.start(0);
+          this.isPlaying = true;
+
+          window.addEventListener("click", () => {
+            this.isPlaying ? audio.suspend() : audio.resume();
+            this.isPlaying = !this.isPlaying;
+          })
 
           // Animation element with frequency
           const renderFrame = () => {

@@ -6,6 +6,7 @@ import { Camera } from "./camera/Camera";
 import { Mesh, IMeshOptions } from "./geometry/Mesh";
 import { Color } from "./utils/color";
 import { Scene } from "./scene/Scene";
+import { Geometry } from "./utilities/geometry";
 
 export interface IColorRGBA {
     r: number;
@@ -57,6 +58,10 @@ class Helix {
         );
 
         return this.MeshInstance;
+    }
+    
+    public GeometryHelper() {
+        return new Geometry();
     }
 
     public Color(HexColor: string) {
