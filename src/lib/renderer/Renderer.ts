@@ -1,9 +1,14 @@
 import { IColorRGBA } from "../Helix";
 import { Camera } from "../camera/Camera";
 import { Mesh } from "../geometry/Mesh";
-import { RendererDOM } from "./RendererDOM";
+import { RenderShader } from "./RendererShader";
 import { Scene } from "../scene/Scene";
 
+export interface Shader<T> {
+    uniforms: T;
+    fragment: string;
+    vertex: string;
+}
 export interface IRenderInitialization {
     width?: number;
     height?: number;
@@ -12,7 +17,7 @@ export interface IRenderInitialization {
 
 export class Render {
     background: IColorRGBA;
-    rendererDOM: RendererDOM;
+    rendererShader: RenderShader;
     uPMatrixLocation!: WebGLUniformLocation | null;
 
     constructor(options?: IRenderInitialization) {
@@ -20,18 +25,17 @@ export class Render {
             options && options.background
                 ? options.background
                 : {
-                      r: 0.5,
-                      g: 0.6,
-                      b: 0.4,
-                      a: 1.0
-                  };
+                    r: 0.5,
+                    g: 0.6,
+                    b: 0.4,
+                    a: 1.0
+                };
 
         const width = options && options.width ? options.width : undefined;
         const height = options && options.height ? options.height : undefined;
-        this.rendererDOM = new RendererDOM(width, height);
-
-        this.uPMatrixLocation = this.rendererDOM.gl.getUniformLocation(
-            this.rendererDOM.program,
+        this.rendererShader = new RenderShader(width, height);
+        this.uPMatrixLocation = this.rendererShader.gl.getUniformLocation(
+            this.rendererShader.program,
             "uWMatrix"
         );
     }
@@ -41,32 +45,32 @@ export class Render {
     }
 
     public getGLContext(): WebGLRenderingContext {
-        return this.rendererDOM.gl;
+        return this.rendererShader.gl;
     }
 
     public getGLProgram() {
-        return this.rendererDOM.program;
+        return this.rendererShader.program;
     }
 
     render(camera: Camera, scene: Scene) {
-        this.rendererDOM.gl.clearColor(
+        this.rendererShader.gl.clearColor(
             this.background.r,
             this.background.g,
             this.background.b,
             this.background.a
         );
 
-        this.rendererDOM.gl.clear(this.rendererDOM.gl.COLOR_BUFFER_BIT);
+        this.rendererShader.gl.clear(this.rendererShader.gl.COLOR_BUFFER_BIT);
 
-        this.rendererDOM.gl.viewport(
+        this.rendererShader.gl.viewport(
             0,
             0,
-            this.rendererDOM.width,
-            this.rendererDOM.height
+            this.rendererShader.width,
+            this.rendererShader.height
         );
 
         // Render Scene
-        scene.render(this.rendererDOM.width, this.rendererDOM.height);
+        scene.render(this.rendererShader.width, this.rendererShader.height);
         const objects: Mesh[] = scene.getObjectsOfScene();
 
         for (let i = 0; i < objects.length; i++) {
@@ -75,7 +79,7 @@ export class Render {
             objects[i].renderObject();
             const positionObject = objects[i].getPosition(camera.uWMatrix);
 
-            this.rendererDOM.gl.uniformMatrix4fv(
+            this.rendererShader.gl.uniformMatrix4fv(
                 this.uPMatrixLocation,
                 false,
                 positionObject

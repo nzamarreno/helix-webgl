@@ -8,6 +8,7 @@ _Little Library for help you to create WebGL WebSite_
 -   [Getting Start](#getting-start)
 -   [Parameters](#parameters)
 -   [Helpers](#helpers)
+- [Case Study](#case-study)
 -   [Todo](#to-do)
 
 ## Webpack CLI
@@ -178,9 +179,94 @@ scene.add(AxisGeometry);
 | ---------- | ------ | --------- | ------------: |
 | dimensions | number | false     |            50 |
 
+## Case Study
+
+### Use Audio with average
+```typescript
+import { Icosphere_vertices, Icosphere_indices } from "./shapes";
+
+// Load music & Active Helper vizualizer
+const music = Helix.Audio("./assets/music.mp3");
+music.helper = true;
+
+// Instance Geometry Helper
+const geometryHelper = Helix.GeometryHelper();
+
+// Create form
+let sphere = Helix.Mesh(Icosphere_vertices, Icosphere_indices, {
+    color: Helix.Color("FFFFFF"),
+    wireframe: true
+});
+
+function modifyGeometry(geometry: Mesh, average: number | undefined) {
+    const newGeometry = [];
+
+    // Return array with object {x: number, y: number, z: number}
+    const decomposedGeometry = geometryHelper.getGeometryPoints(
+        Icosphere_vertices
+    );
+
+    if (average && average !== 0) {
+        // 1 + (average / 10) * Noise.perlin3(p.x, p.y, p.z)
+        const displacement = 1 + average / 200;
+        for (var i = 0; i < decomposedGeometry.length; i++) {
+            let p = decomposedGeometry[i];
+            const geometryTransform = geometryHelper.multiplyScalar(
+                decomposedGeometry[i],
+                displacement
+            );
+            newGeometry.push(
+                geometryTransform.x,
+                geometryTransform.y,
+                geometryTransform.z
+            );
+        }
+        geometry.geometry = newGeometry;
+    } else {
+        geometry.geometry = Icosphere_vertices;
+    }
+}
+
+function draw() {
+    // Get Tonality
+    const musicAverage = music.getTonality(10);
+
+    camera.rotate.y += 0.02;
+    camera.rotate.x += 0.02;
+
+    modifyGeometry(sphere, average);
+
+    render.render(camera, scene);
+    requestAnimationFrame(draw);
+}
+
+draw();
+
+```
+
+### Use `Anime.js` library
+```typescript
+import Anime from "animejs";
+
+let myObject = {
+    valueDynamic: 0
+};
+
+// Basic usage
+const animation = Anime<{ valueDynamic: number }>({
+    targets: myObject,
+    duration: 10000,
+    valueDynamic: 12,
+    easing: "linear",
+    round: 10,
+    update: () => console.log(myObject.valueDynamic)
+});
+
+```
+
 ## To do
 
--   Retrieve waves of song with the `Audio` class
+-   Audio play and resume action
 
 ---
 

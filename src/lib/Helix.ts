@@ -74,7 +74,7 @@ class Helix {
         return this.AudioInstance;
     }
 
-    public FloorGeometryHelper(options?: IFloor) {
+    public FloorGeometryHelper(options?: IFloor): Mesh {
         const floor = new Floor(options);
         floor.build();
 
@@ -84,7 +84,7 @@ class Helix {
         });
     }
 
-    public AxisGeometryHelper(dimensions?: number) {
+    public AxisGeometryHelper(dimensions?: number): Mesh {
         const axis = new Axis(dimensions);
         axis.build();
 
